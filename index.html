@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <section id="intro-scene" class="scene-container">
+        
+        <header class="tv-header">
+            <h1>SVG</h1>
+            <h2>Screengirl's Virtual Gallery</h2>
+        </header>
+
+        <div class="tv-wrapper" id="tv-trigger">
+            <div class="cube">
+                <div class="face top"></div>
+                <div class="face front"></div>
+                <div class="face left">
+                    <div class="screen-noise"></div>
+                </div>
+                <div class="face right"></div>
+            </div>
+            <div class="tv-shadow"></div>
+        </div>
+        
+        <p class="instruction">Click the terminal to access files</p>
+    </section>
+
+    <section id="file-manager" class="window-container hidden">
+        <div class="window-frame">
+            
+            <div class="window-header">
+                <div class="header-left">
+                    <span class="window-title">/mnt/gallery/</span>
+                </div>
+                <div class="header-controls">
+                    <button id="view-grid-btn" class="view-btn active" title="Grid View">::</button>
+                    <button id="view-list-btn" class="view-btn" title="List View">=</button>
+                    <button id="close-manager-btn" class="window-close">X</button>
+                </div>
+            </div>
+
+            <div class="window-body" id="file-grid">
+                </div>
+
+            <div class="window-footer">
+                <span id="item-count">0 items</span>
+            </div>
+        </div>
+    </section>
+
+    <div id="lightbox" class="lightbox hidden">
+        <span id="close-lightbox-btn" class="close">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div id="caption"></div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

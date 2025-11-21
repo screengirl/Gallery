@@ -1,0 +1,253 @@
+/* --- Global & Reset --- */
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Courier New', Courier, monospace; }
+body {
+    background-color: #111;
+    color: #eee;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden { display: none !important; }
+
+/* --- Scene Container --- */
+.scene-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    perspective: 1000px;
+    gap: 30px;
+}
+
+/* --- Header --- */
+.tv-header {
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+.tv-header h1 { font-size: 3rem; margin-bottom: 5px; font-family: monospace; }
+.tv-header h2 { font-size: 1rem; color: #888; font-weight: normal; }
+
+/* --- Isometric TV --- */
+.tv-wrapper {
+    width: 100px;
+    height: 100px;
+    position: relative;
+    transform-style: preserve-3d;
+    transform: rotateX(-20deg) rotateY(45deg);
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.tv-wrapper:hover {
+    transform: rotateX(-25deg) rotateY(45deg) translateZ(10px);
+}
+.tv-wrapper:hover .face {
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+    border-color: #fff;
+}
+
+.cube {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+}
+
+.face {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: #000;
+    border: 2px solid #888;
+    transition: all 0.3s;
+}
+
+.top   { transform: rotateX(90deg) translateZ(50px); }
+.front { transform: translateZ(50px); background: #111; }
+.right { transform: rotateY(90deg) translateZ(50px); }
+
+/* Left Face (Screen) */
+.face.left {
+    transform: rotateY(-90deg) translateZ(50px);
+    background: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #888; 
+}
+
+/* Screen Noise 
+.screen-noise {
+    width: 75%;
+    height: 75%;
+    background: 
+        repeating-radial-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 50% 0/2500px 2500px,
+        repeating-conic-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 60% 60%/2500px 2500px;
+    background-blend-mode: difference;
+    opacity: 0.8;
+    animation: noise 0.2s infinite steps(3);
+}
+@keyframes noise {
+    0% { background-position: 0 0; }
+    100% { background-position: 100px 100px; }
+}*/
+.screen-noise {
+    width: 80%; /* Adjusted size */
+    height: 80%;
+    background: 
+        repeating-linear-gradient(
+            45deg,
+            transparent 0,
+            rgba(255, 255, 255, 0.1) 2px,
+            transparent 4px
+        ),
+        linear-gradient(to bottom, #000, #222);
+    position: relative;
+    overflow: hidden;
+}
+
+/* We use a pseudo-element for the moving grain to save performance */
+.screen-noise::after {
+    content: "";
+    position: absolute;
+    top: -50%; left: -50%;
+    width: 200%; height: 200%;
+    background: 
+        repeating-radial-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 50% 0/2500px 2500px,
+        repeating-conic-gradient(#ffffff 0 0.0001%, #000000 0 0.0002%) 60% 60%/2500px 2500px;
+    background-blend-mode: difference;
+    opacity: 0.15;
+    animation: smoothNoise 0.5s infinite steps(5); /* steps(5) makes it snappy/retro */
+}
+
+@keyframes smoothNoise {
+    0% { transform: translate(0, 0); }
+    20% { transform: translate(-10%, 10%); }
+    40% { transform: translate(-20%, 5%); }
+    60% { transform: translate(10%, -10%); }
+    80% { transform: translate(5%, 20%); }
+    100% { transform: translate(0, 0); }
+}
+
+.instruction { margin-top: 60px; color: #666; font-size: 1rem; }
+
+/* --- File Manager Window --- */
+.window-container {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(2px);
+}
+
+.window-frame {
+    width: 800px; height: 600px; max-width: 95%;
+    background: #1a1a1a;
+    border: 1px solid #fff;
+    display: flex; flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.window-header {
+    padding: 10px;
+    border-bottom: 1px solid #fff;
+    display: flex; justify-content: space-between; align-items: center;
+    background: #333;
+}
+
+.header-controls { display: flex; gap: 10px; align-items: center; }
+
+.window-close, .view-btn {
+    background: transparent;
+    border: 1px solid #fff;
+    color: #fff;
+    cursor: pointer;
+    width: 25px; height: 25px;
+    display: flex; justify-content: center; align-items: center;
+}
+.window-close:hover, .view-btn:hover, .view-btn.active {
+    background: #fff; color: #000;
+}
+
+.window-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 20px;
+    align-content: start;
+}
+
+/* File Item Styles */
+.file-item {
+    display: flex; flex-direction: column; align-items: center;
+    cursor: pointer; padding: 10px;
+    border: 1px solid transparent;
+}
+.file-item:hover {
+    background: rgba(255,255,255,0.1);
+    border: 1px dotted #555;
+}
+.file-thumb {
+    width: 80px; height: 60px;
+    object-fit: cover; margin-bottom: 8px;
+    border: 1px solid #444; background: #000;
+}
+.file-name { font-size: 0.8rem; text-align: center; word-break: break-all; }
+.file-type { font-size: 0.6rem; color: #888; margin-top: 2px; }
+
+.window-footer {
+    padding: 5px 10px; border-top: 1px solid #333;
+    font-size: 0.7rem; color: #888;
+}
+
+/* --- LIST VIEW MODE --- */
+.window-body.view-list {
+    display: flex; flex-direction: column; gap: 5px;
+}
+.window-body.view-list .file-item {
+    flex-direction: row; align-items: center;
+    width: 100%; padding: 8px;
+    border-bottom: 1px solid #333;
+}
+.window-body.view-list .file-thumb {
+    width: 40px; height: 40px;
+    margin-bottom: 0; margin-right: 15px;
+}
+.window-body.view-list .file-name {
+    font-size: 1rem; flex-grow: 1; text-align: left;
+}
+.window-body.view-list .file-item:hover {
+    background-color: #fff; border-color: #fff;
+}
+.window-body.view-list .file-item:hover .file-name,
+.window-body.view-list .file-item:hover .file-type {
+    color: #000;
+}
+
+/* --- Lightbox --- */
+.lightbox {
+    position: fixed; z-index: 2000;
+    top:0; left:0; width:100%; height:100%;
+    background: rgba(0,0,0,0.95);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+}
+.lightbox-content { max-width: 90%; max-height: 80vh; border: 1px solid #fff; }
+.close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; }
+#caption { margin-top: 15px; color: #fff; }
+
+/* --- Mobile --- */
+@media (max-width: 768px) {
+    .scene-container { transform: scale(0.8); }
+    .tv-header h1 { font-size: 2rem; }
+    .window-frame { width: 100%; height: 100%; max-width: 100%; border: none; }
+    .window-body { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+}
