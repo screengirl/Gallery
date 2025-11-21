@@ -23,15 +23,30 @@ body {
 }
 
 /* --- Header --- */
-.tv-header {
-    text-align: center;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-}
-.tv-header h1 { font-size: 3rem; margin-bottom: 5px; font-family: monospace; }
-.tv-header h2 { font-size: 1rem; color: #888; font-weight: normal; }
 
+.tv-side-label {
+    text-align: center;
+    color: #fff;
+    border: 2px solid #fff;
+    padding: 5px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #000;
+}
+.tv-side-label h1 {
+    font-size: 1.8rem;
+    line-height: 1;
+    margin: 0;
+}
+.tv-side-label span {
+    font-size: 1rem;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
 /* --- Isometric TV --- */
 .tv-wrapper {
     width: 100px;
@@ -133,8 +148,28 @@ body {
     100% { transform: translate(0, 0); }
 }
 
-.instruction { margin-top: 60px; color: #666; font-size: 1rem; }
+.instruction { 
+    margin-top: 60px; 
+    color: #fff; 
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    
+    /* GLASS EFFECT FOR INSTRUCTION PILL */
+    background: rgba(0, 0, 0, 0.6);
+    padding: 10px 20px;
+    border-radius: 50px; /* Pill shape */
+    backdrop-filter: blur(3px);
+    border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle border highlight */
+    
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: all 0.3s ease;
+}
 
+.instruction:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #fff;
+    transform: translateY(-2px);
+}
 /* --- File Manager Window --- */
 .window-container {
     position: fixed;
@@ -244,6 +279,53 @@ body {
 .close { position: absolute; top: 20px; right: 30px; color: #fff; font-size: 2rem; cursor: pointer; }
 #caption { margin-top: 15px; color: #fff; }
 
+
+/* --- Background Text Canvas --- */
+#bg-canvas {
+    position: fixed;
+    top: 50%;      /* Center positioning... */
+    left: 50%;
+    /* ...combined with translate creates a perfect center anchor for rotation */
+    transform-origin: center center; 
+    translate: -50% -50%; 
+    
+    width: 250vw;  /* Oversized to cover corners when rotated */
+    height: 150vh;
+    
+    z-index: -1;   /* Behind everything */
+    background: transparent;
+    
+    /* Layout for the text lines */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Start writing from middle or top, your choice */
+    align-items: flex-start; /* Align text to left (before rotation) */
+    padding: 50px;
+    overflow: hidden;
+    pointer-events: none; /* Clicks pass through */
+}
+
+.bg-line {
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    font-size: 4rem;       /* Large text for background effect */
+    line-height: 1;        /* Tight line height */
+    color: #ffffff;        /* White Text */
+    
+    /* THE MAGIC TRICK */
+    mix-blend-mode: difference; 
+    
+    white-space: nowrap;   /* Don't wrap inside the line automatically */
+    overflow: hidden;      /* Cut off if width is restricted */
+    text-transform: uppercase;
+}
+
+.highlight-word {
+    /* Color is now injected by JS */
+    font-weight: bold;
+    /* currentColor makes the shadow match whatever color JS assigns */
+    text-shadow: 0 0 5px currentColor; 
+}
 /* --- Mobile --- */
 @media (max-width: 768px) {
     .scene-container { transform: scale(0.8); }

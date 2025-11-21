@@ -8,28 +8,34 @@
 </head>
 <body>
 
+    <!-- 1. BACKGROUND LAYER (Empty container, sits behind everything) -->
+    <div id="bg-canvas"></div>
+
+    <!-- 2. UI LAYER: Intro Scene (The TV) -->
     <section id="intro-scene" class="scene-container">
-        
-        <header class="tv-header">
-            <h1>SVG</h1>
-            <h2>Screengirl's Virtual Gallery</h2>
-        </header>
+ 
 
         <div class="tv-wrapper" id="tv-trigger">
             <div class="cube">
                 <div class="face top"></div>
-                <div class="face front"></div>
+                <div class="face front">
+                    <div class="tv-side-label">
+                        <h1>SVG</h1>
+                        <span>GALLERY</span>
+                    </div>
+                </div>
                 <div class="face left">
                     <div class="screen-noise"></div>
                 </div>
-                <div class="face right"></div>
+                <div class="face right"><div>
             </div>
             <div class="tv-shadow"></div>
         </div>
         
-        <p class="instruction">Click the terminal to access files</p>
+       <!-- <p class="instruction">TV↑ TV↑ TV↑ TV↑ </p> -->
     </section>
 
+    <!-- 3. UI LAYER: File Manager (Hidden by default) -->
     <section id="file-manager" class="window-container hidden">
         <div class="window-frame">
             
@@ -45,7 +51,8 @@
             </div>
 
             <div class="window-body" id="file-grid">
-                </div>
+                <!-- Content injected by app.js -->
+            </div>
 
             <div class="window-footer">
                 <span id="item-count">0 items</span>
@@ -53,12 +60,16 @@
         </div>
     </section>
 
+    <!-- 4. UI LAYER: Lightbox -->
     <div id="lightbox" class="lightbox hidden">
         <span id="close-lightbox-btn" class="close">&times;</span>
         <img class="lightbox-content" id="lightbox-img">
         <div id="caption"></div>
     </div>
 
+    <!-- SCRIPTS -->
+    <script src="js/textData.js"></script>
+    <script src="js/background.js"></script>
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
 </body>
